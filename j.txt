@@ -1,0 +1,1140 @@
+class BTreeADT {
+    int[] treeArray;
+    int maxSize;
+    int currentSize;
+
+    public BTreeADT(int maxSize) {
+        this.maxSize = maxSize;
+        this.treeArray = new int[maxSize];
+        this.currentSize = 0;
+    }
+
+    public boolean isEmpty() {
+        return currentSize == 0;
+    }
+
+    public boolean isFull() {
+        return currentSize == maxSize;
+    }
+
+    public void insert(int data) {
+        if (isFull()) {
+            System.out.println("Tree is full.");
+        } else {
+            treeArray[currentSize] = data;
+            currentSize++;
+            System.out.println("Inserted " + data);
+        }
+    }
+
+    public int search(int data) {
+        if (isEmpty()){
+			System.out.println("Tree is empty.");			
+        } else {
+			for (int i = 0; i < currentSize; i++) {
+				if (treeArray[i] == data) {
+					return i;
+				}
+			}
+        }
+		return -1;
+    }
+
+    public boolean delete(int data) {
+        int index = search(data);        
+        if (index == -1) {
+            System.out.println("Element not found.");
+            return false;
+        } else {
+            treeArray[index] = treeArray[currentSize - 1];
+            treeArray[currentSize - 1] = 0;
+            currentSize--;
+            System.out.println("Deleted " + data + " from the tree.");
+            return true;
+        }
+    }
+
+    public void inorderTraversal(int index) {
+		if (isEmpty()) System.out.println("Tree is empty.");			
+        else {
+			if (index < 0 || index >= currentSize){
+				System.out.println("Index is not correct!");
+				return;
+			} else if (treeArray[index] == 0) {
+				System.out.print("- ");
+				return;
+			} else {
+				inorderTraversal(2 * index + 1);
+				System.out.print(treeArray[index] + " ");
+				inorderTraversal(2 * index + 2);
+			}
+		}
+    }
+
+    public void preorderTraversal(int index) {
+		if (isEmpty()) System.out.println("Tree is empty.");			
+        else {
+			if (index < 0 || index >= currentSize){
+				System.out.println("Index is not correct!");
+				return;
+			} else if (treeArray[index] == 0) {
+				System.out.print("- ");
+				return;
+			} else {
+				System.out.print(treeArray[index] + " ");
+				preorderTraversal(2 * index + 1);
+				preorderTraversal(2 * index + 2);
+			} 
+		}
+    }
+
+    public void postorderTraversal(int index) {
+		if (isEmpty()) System.out.println("Tree is empty.");			
+        else {
+			if (index < 0 || index >= currentSize){
+				System.out.println("Index is not correct!");
+				return;
+			} else if (treeArray[index] == 0) {
+				System.out.print("- ");
+				return;
+			} else {
+				postorderTraversal(2 * index + 1);
+				postorderTraversal(2 * index + 2);
+				System.out.print(treeArray[index] + " ");
+			} 
+		}
+    }
+	
+	public void levelOrderTraversal() {
+		if (isEmpty()){
+			System.out.println("Tree is empty.");			
+        } else {
+			for (int i = 0; i < currentSize; i++) {
+				if (treeArray[i] != 0) {
+					System.out.print(treeArray[i] + " ");
+				} else {
+					System.out.print("- ");
+				}
+			}
+		}
+    }
+}
+
+public class BinaryTreeADTArray {
+    public static void main(String[] args) {
+        BTreeADT binaryTree = new BTreeADT(10);
+		
+		System.out.println("Levelorder Traversal:");
+        binaryTree.levelOrderTraversal();
+        System.out.println();
+		
+		// Assume 0 indicate no elements in the branch
+		/* binaryTree.insert(5);
+        binaryTree.insert(3);
+        binaryTree.insert(9);
+        binaryTree.insert(2);
+        binaryTree.insert(4);        
+        binaryTree.insert(7);
+		binaryTree.insert(1); */
+		
+        binaryTree.insert(5);
+        binaryTree.insert(3);
+        binaryTree.insert(9);
+        binaryTree.insert(2);
+        binaryTree.insert(0);
+        binaryTree.insert(0);
+        binaryTree.insert(1);
+		binaryTree.insert(0);
+		binaryTree.insert(8);
+
+        System.out.println("Levelorder Traversal:");
+        binaryTree.levelOrderTraversal();
+        System.out.println();
+		
+		System.out.println("Inorder Traversal:");
+        binaryTree.inorderTraversal(0);
+        System.out.println();
+
+        System.out.println("Preorder Traversal:");
+        binaryTree.preorderTraversal(-1);
+        System.out.println();
+
+        System.out.println("Postorder Traversal:");
+        binaryTree.postorderTraversal(0);
+        System.out.println();
+		
+		System.out.println("Postorder Traversal from 1st index node:");
+        binaryTree.postorderTraversal(1);
+        System.out.println();
+
+        System.out.println("Searching for 9: " + binaryTree.search(9));
+        System.out.println("Searching for 6: " + binaryTree.search(6));
+
+        System.out.println("Deleting 3: " + binaryTree.delete(3));
+
+        System.out.println("Inorder Traversal after deleting 3:");
+        binaryTree.inorderTraversal(0);
+        System.out.println();		
+    }
+}
+
+============================================================================================================
+class Node {
+    int data;
+    Node left;
+    Node right;
+
+    public Node(int data) {
+        this.data = data;
+        this.left = null;
+        this.right = null;
+    }
+}
+
+public class BinarySearchTreeADT {
+    Node root;
+
+    public BinarySearchTreeADT() {
+        root = null;
+    }
+	
+	public boolean isEmpty() {
+        return root == null;
+    }
+	
+	public Node insert(Node cNode, int data) {
+        if (cNode == null) {
+            cNode = new Node(data);
+            return cNode;
+        }
+		
+        if (data < cNode.data) {
+            cNode.left = insert(cNode.left, data);
+        } else if (data > cNode.data) {
+            cNode.right = insert(cNode.right, data);
+        }
+
+        return cNode;
+    }
+
+    public boolean search(Node root, int data) {
+        if (root == null) {
+            return false;
+        }
+		
+        if (data == root.data) {
+            return true;
+        } else if (data < root.data) {
+            return search(root.left, data);
+        } else {
+            return search(root.right, data);
+        }
+    }
+
+	public Node searchNode(Node cNode, int data) {
+        if (cNode == null) {
+            return cNode;
+        }
+		
+        if (data == cNode.data) {
+            return cNode;
+        } else if (data < cNode.data) {
+            return searchNode(cNode.left, data);
+        } else {
+            return searchNode(cNode.right, data);
+        }
+    }
+
+    public Node delete(Node cNode, int data) {
+        if (cNode == null) {
+            return cNode;
+        }
+
+        if (data < cNode.data) {
+            cNode.left = delete(cNode.left, data);
+        } else if (data > cNode.data) {
+            cNode.right = delete(cNode.right, data);
+        } else {
+            // Case 1: Node is a leaf
+            if (cNode.left == null && cNode.right == null) {
+                cNode = null;
+            }
+            // Case 2: Node has one child
+            else if (cNode.left == null) {
+                cNode = cNode.right;
+            } else if (cNode.right == null) {
+                cNode = cNode.left;
+            }
+            // Case 3: Node has two children
+            else {
+                int minValue = minValue(cNode.right);
+                cNode.data = minValue;
+                cNode.right = delete(cNode.right, minValue);
+            }
+        }
+        return cNode;
+    }
+
+    private int minValue(Node cNode) {
+        int minValue = cNode.data;
+        while (cNode.left != null) {
+            minValue = cNode.left.data;
+            cNode = cNode.left;
+        }
+        return minValue;
+    }
+
+    public void inorderTraversal(Node cNode) {
+        if (cNode != null) {
+            inorderTraversal(cNode.left);
+            System.out.print(cNode.data + " ");
+            inorderTraversal(cNode.right);
+        }
+    }
+
+    public void preorderTraversal(Node cNode) {
+        if (cNode != null) {
+            System.out.print(cNode.data + " ");
+            preorderTraversal(cNode.left);
+            preorderTraversal(cNode.right);
+        }
+    }
+
+    public void postorderTraversal(Node cNode) {
+        if (cNode != null) {
+            postorderTraversal(cNode.left);
+            postorderTraversal(cNode.right);
+            System.out.print(cNode.data + " ");
+        }
+    }
+
+    public int findMin(Node cNode) {
+        if (isEmpty()) {
+            throw new IllegalStateException("Tree is empty");
+        }
+        while (cNode.left != null) {
+            cNode = cNode.left;
+        }
+        return cNode.data;
+    }
+
+    public int findMax(Node cNode) {
+        if (isEmpty()) {
+            throw new IllegalStateException("Tree is empty");
+        }
+        while (cNode.right != null) {
+            cNode = cNode.right;
+        }
+        return cNode.data;
+    }
+
+    public static void main(String[] args) {
+        BinarySearchTreeADT bst = new BinarySearchTreeADT();
+
+        bst.root = bst.insert(bst.root, 50);
+        bst.root = bst.insert(bst.root, 30);
+        bst.root = bst.insert(bst.root, 70);
+        bst.root = bst.insert(bst.root, 20);
+        bst.root = bst.insert(bst.root, 40);
+        bst.root = bst.insert(bst.root, 60);
+        bst.root = bst.insert(bst.root, 80);
+		bst.root = bst.insert(bst.root, 10);
+        bst.root = bst.insert(bst.root, 25);
+		 System.out.println("Inorder Traversal:");
+        bst.inorderTraversal(bst.root);
+		System.out.println();
+		
+		/* BinarySearchTreeADT st = new BinarySearchTreeADT();
+
+        st.root = st.insert(st.root, 5);
+        st.root = st.insert(st.root, 3);
+        st.root = st.insert(st.root, 7);
+        st.root = st.insert(st.root, 2);
+        st.root = st.insert(st.root, 4);
+        st.root = st.insert(st.root, 6);
+        st.root = st.insert(st.root, 8);
+		
+       
+		
+		System.out.println("Inorder Traversal form given Node:");
+		bst.inorderTraversal(bst.searchNode(bst.root, 30));
+		System.out.println();
+
+        System.out.println("Preorder Traversal:");
+        bst.preorderTraversal(bst.root);
+		System.out.println();
+
+        System.out.println("Postorder Traversal:");
+        bst.postorderTraversal(bst.root);
+		System.out.println();
+
+        System.out.println("Searching for 40: " + bst.search(bst.root, 40));
+        System.out.println("Searching for 90: " + bst.search(bst.root, 90));
+
+        System.out.println("Min Value: " + bst.findMin(bst.root));
+        System.out.println("Max Value: " + bst.findMax(bst.root));
+
+        System.out.println("Is the tree empty? " + bst.isEmpty());
+
+        bst.root = bst.delete(bst.root, 30);
+        System.out.println("Inorder Traversal after deleting 30:");
+        bst.inorderTraversal(bst.root);
+		System.out.println();
+		
+		st.root = st.delete(st.root, 5);
+		System.out.println("Inorder Traversal:");
+        st.inorderTraversal(st.root);
+		System.out.println(); */
+    }
+}
+===================================================================================================================
+class Node {
+    int data;
+    Node next;
+
+    public Node(int data) {
+        this.data = data;
+        this.next = null;
+    }
+}
+
+public class ALGraphADT {
+    int numVertices;
+    int maxVertices;
+    Node[] adjacencyList;
+
+    public ALGraphADT(int maxVertices) {
+        this.maxVertices = maxVertices;
+        this.numVertices = 0;
+        this.adjacencyList = new Node[maxVertices];
+    }
+
+    public boolean isEmpty() {
+        return numVertices == 0;
+    }
+
+    public boolean isFull() {
+        return numVertices == maxVertices;
+    }
+
+    public void insertVertex() {
+        if (isFull()) {
+            System.out.println("Graph is full.");
+            return;
+        }
+        numVertices++;
+    }
+
+    public void insertEdge(int source, int destination) {
+        if (source >= 0 && source < numVertices && destination >= 0 && destination < numVertices) {
+            Node newNode = new Node(destination);
+            newNode.next = adjacencyList[source];
+            adjacencyList[source] = newNode;
+
+            // For undirected graph, uncomment the following lines:
+            // Node newRevNode = new Node(source);
+            // newRevNode.next = adjacencyList[destination];
+            // adjacencyList[destination] = newRevNode;
+        } else {
+            System.out.println("Invalid vertices.");
+        }
+    }
+
+    public void deleteEdge(int source, int destination) {
+        if (source < 0 || source >= numVertices || destination < 0 || destination >= numVertices) {
+            System.out.println("Invalid vertices.");
+            return;
+        }
+
+        adjacencyList[source] = deleteNode(adjacencyList[source], destination);
+
+        // For undirected graph, uncomment the following lines:
+        // adjacencyList[destination] = deleteNode(adjacencyList[destination], source);
+    }
+
+    private Node deleteNode(Node head, int data) {
+        if (head == null) {
+            return null;
+        }
+
+        if (head.data == data) {
+            return head.next;
+        }
+
+        Node curr = head;
+        while (curr.next != null) {
+            if (curr.next.data == data) {
+                curr.next = curr.next.next;
+                break;
+            }            
+            curr = curr.next;
+        }
+
+        return head;
+    }
+
+    public boolean isEdge(int source, int destination) {
+        Node curr = adjacencyList[source];
+        while (curr != null) {
+            if (curr.data == destination) {
+                return true;
+            }
+            curr = curr.next;
+        }
+        return false;
+    }
+
+    public void traverseGraph() {
+        for (int i = 0; i < numVertices; i++) {
+            Node curr = adjacencyList[i];
+            System.out.print("Vertex " + i + " is connected to: ");
+            while (curr != null) {
+                System.out.print(curr.data + " ");
+                curr = curr.next;
+            }
+            System.out.println();
+        }
+    }
+
+    public void deleteVertex(int vertex) {
+        if (vertex < 0 || vertex >= numVertices) {
+            System.out.println("Invalid vertex.");
+            return;
+        }
+
+        // Delete the vertex
+        adjacencyList[vertex] = null;
+        
+        // Delete all edges connected to this vertex
+        for (int i = 0; i < numVertices; i++) {
+            if (isEdge(i, vertex)) {
+                deleteEdge(i, vertex);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        int maxVertices = 5;
+        ALGraphADT graph = new ALGraphADT(maxVertices);
+
+        graph.insertVertex();
+        graph.insertVertex();
+        graph.insertVertex();
+        graph.insertVertex();
+        graph.insertVertex();
+
+        graph.insertEdge(0, 1);
+        graph.insertEdge(0, 2);
+		graph.insertEdge(0, 3);
+        graph.insertEdge(1, 2);
+        graph.insertEdge(2, 3);
+		graph.insertEdge(2, 1);
+        graph.insertEdge(3, 4);
+		graph.insertEdge(4, 1);
+		graph.insertEdge(4, 3);
+
+        System.out.println("Traversing the graph:");
+        graph.traverseGraph();
+
+        System.out.println("Is there an edge between 0 and 1? " + graph.isEdge(0, 1));
+        System.out.println("Is there an edge between 1 and 3? " + graph.isEdge(1, 3));
+
+        graph.deleteEdge(0, 1);
+        System.out.println("Deleted edge between 0 and 1");
+
+        graph.deleteVertex(3);
+        System.out.println("Deleted vertex 3");
+
+        System.out.println("Traversing the graph after deletion:");
+        graph.traverseGraph();
+    }
+}
+================================================================================================================
+public class AMGraphADT {
+    private int[][] adjacencyMatrix;
+    private int numVertices;
+    private int maxVertices;
+
+    public AMGraphADT(int maxVertices) {
+        this.maxVertices = maxVertices;
+        this.adjacencyMatrix = new int[maxVertices][maxVertices];
+        this.numVertices = 0;
+    }
+
+    public boolean isEmpty() {
+        return numVertices == 0;
+    }
+
+    public boolean isFull() {
+        return numVertices == maxVertices;
+    }
+
+    public void insertVertex() {
+        if (isFull()) {
+            System.out.println("Graph is full.");
+            return;
+        }
+        numVertices++;
+    }
+
+	public void deleteVertex(int vertex) {
+        if (vertex >= 0 && vertex < numVertices) {
+            // Remove all edges connected to the vertex
+            for (int i = 0; i < numVertices; i++) {
+                adjacencyMatrix[i][vertex] = 0;
+                adjacencyMatrix[vertex][i] = 0;
+            }
+        } else {
+            System.out.println("Invalid vertex.");
+        }
+    }
+	
+    public void insertEdge(int source, int destination, int weight) {
+        if (source >= 0 && source < numVertices && destination >= 0 && destination < numVertices) {
+            adjacencyMatrix[source][destination] = weight;
+            // For undirected graph, uncomment the following line:
+            // adjacencyMatrix[destination][source] = weight;
+        } else {
+            System.out.println("Invalid vertices.");
+        }
+    }
+
+    public void deleteEdge(int source, int destination) {
+        if (source >= 0 && source < numVertices && destination >= 0 && destination < numVertices) {
+            adjacencyMatrix[source][destination] = 0;
+            // For undirected graph, uncomment the following line:
+            // adjacencyMatrix[destination][source] = 0;
+        } else {
+            System.out.println("Invalid vertices.");
+        }
+    }
+
+    public boolean isEdge(int source, int destination) {
+        return adjacencyMatrix[source][destination] != 0;
+    }
+
+    public void traverseGraph() {
+        for (int i = 0; i < numVertices; i++) {
+            System.out.print("Vertex " + i + " is connected to: ");
+            for (int j = 0; j < numVertices; j++) {
+                if (adjacencyMatrix[i][j] != 0) {
+                    System.out.print(j + " ");
+                }
+            }
+            System.out.println();
+        }
+    }
+
+    public static void main(String[] args) {
+        int maxVertices = 5;
+        AMGraphADT graph = new AMGraphADT(maxVertices);
+
+        System.out.println("Is the graph empty? " + graph.isEmpty());
+
+        graph.insertVertex();
+        graph.insertVertex();
+        graph.insertVertex();
+        graph.insertVertex();
+        graph.insertVertex();
+		
+		// Weighted graph
+        graph.insertEdge(0, 1, 10);
+        graph.insertEdge(0, 2, 20);
+        graph.insertEdge(1, 2, 30);
+        graph.insertEdge(2, 3, 40);
+        graph.insertEdge(3, 4, 50);
+
+        System.out.println("Traversing the graph:");
+        graph.traverseGraph();
+
+        System.out.println("Is there an edge between 0 and 1? " + graph.isEdge(0, 1));
+        System.out.println("Is there an edge between 1 and 3? " + graph.isEdge(1, 3));
+
+        graph.deleteEdge(0, 1);
+        System.out.println("Deleted edge between 0 and 1");
+
+        System.out.println("Traversing the graph after deletion:");
+        graph.traverseGraph();
+
+        graph.deleteVertex(3);
+        System.out.println("Deleted vertex 2");
+
+        System.out.println("Traversing the graph after deleting vertex:");
+        graph.traverseGraph();
+    }
+}
+===========================================================================================
+
+import java.util.*;
+
+class Node {
+    int data;
+    int weight;
+    Node next;
+
+    public Node(int data, int weight) {
+        this.data = data;
+        this.weight = weight;
+        this.next = null;
+    }
+}
+
+class GraphADT {
+
+    int numVertices;
+    int maxVertices;
+
+    int[][] adjacencyMatrix;
+    Node[] adjacencyList;
+
+    public GraphADT(int maxVertices) {
+        this.maxVertices = maxVertices;
+        this.numVertices = 0;
+
+        adjacencyMatrix = new int[maxVertices][maxVertices];
+        adjacencyList = new Node[maxVertices];
+    }
+
+    public boolean isEmpty() {
+        return numVertices == 0;
+    }
+
+    public boolean isFull() {
+        return numVertices == maxVertices;
+    }
+
+    public void insertVertex() {
+        if (isFull()) {
+            System.out.println("Graph is full.");
+            return;
+        }
+
+        numVertices++;
+    }
+
+    // Insert edge into both representations
+    public void insertEdge(int source, int destination, int weight) {
+
+        if (source < 0 || source >= numVertices ||
+            destination < 0 || destination >= numVertices ||
+            weight <= 0) {
+            System.out.println("Invalid vertices or weight.");
+            return;
+        }
+
+        // Adjacency Matrix
+        adjacencyMatrix[source][destination] = weight;
+
+        // Adjacency List
+        Node newNode = new Node(destination, weight);
+        newNode.next = adjacencyList[source];
+        adjacencyList[source] = newNode;
+    }
+
+    public void displayMatrix() {
+        System.out.println("Adjacency Matrix:");
+
+        for (int i = 0; i < numVertices; i++) {
+            for (int j = 0; j < numVertices; j++) {
+                System.out.print(adjacencyMatrix[i][j] + "\t");
+            }
+            System.out.println();
+        }
+    }
+
+    public void displayList() {
+        System.out.println("Adjacency List:");
+
+        for (int i = 0; i < numVertices; i++) {
+            System.out.print(i + " -> ");
+
+            Node curr = adjacencyList[i];
+
+            while (curr != null) {
+                System.out.print(curr.data + "(" + curr.weight + ") -> ");
+                curr = curr.next;
+            }
+
+            System.out.println("null");
+        }
+    }
+
+    // DFS using Adjacency Matrix
+    public void DFSMatrix(int start) {
+        if (start < 0 || start >= numVertices) {
+            System.out.println("Invalid start vertex.");
+            return;
+        }
+
+        boolean[] visited = new boolean[numVertices];
+        DFSMatrixUtil(start, visited);
+        System.out.println();
+    }
+
+    private void DFSMatrixUtil(int vertex, boolean[] visited) {
+        visited[vertex] = true;
+        System.out.print(vertex + " ");
+
+        for (int i = 0; i < numVertices; i++) {
+            if (adjacencyMatrix[vertex][i] != 0 && !visited[i]) {
+                DFSMatrixUtil(i, visited);
+            }
+        }
+    }
+
+    // DFS using Adjacency List
+    public void DFSList(int start) {
+        if (start < 0 || start >= numVertices) {
+            System.out.println("Invalid start vertex.");
+            return;
+        }
+
+        boolean[] visited = new boolean[numVertices];
+        DFSListUtil(start, visited);
+        System.out.println();
+    }
+
+    private void DFSListUtil(int vertex, boolean[] visited) {
+        visited[vertex] = true;
+        System.out.print(vertex + " ");
+
+        Node curr = adjacencyList[vertex];
+
+        while (curr != null) {
+            if (!visited[curr.data]) {
+                DFSListUtil(curr.data, visited);
+            }
+
+            curr = curr.next;
+        }
+    }
+
+    // BFS using Adjacency Matrix
+    public void BFSMatrix(int start) {
+        if (start < 0 || start >= numVertices) {
+            System.out.println("Invalid start vertex.");
+            return;
+        }
+
+        boolean[] visited = new boolean[numVertices];
+        Queue<Integer> queue = new LinkedList<>();
+
+        visited[start] = true;
+        queue.add(start);
+
+        while (!queue.isEmpty()) {
+            int vertex = queue.poll();
+            System.out.print(vertex + " ");
+
+            for (int i = 0; i < numVertices; i++) {
+                if (adjacencyMatrix[vertex][i] != 0 && !visited[i]) {
+                    visited[i] = true;
+                    queue.add(i);
+                }
+            }
+        }
+
+        System.out.println();
+    }
+
+    // BFS using Adjacency List
+    public void BFSList(int start) {
+        if (start < 0 || start >= numVertices) {
+            System.out.println("Invalid start vertex.");
+            return;
+        }
+
+        boolean[] visited = new boolean[numVertices];
+        Queue<Integer> queue = new LinkedList<>();
+
+        visited[start] = true;
+        queue.add(start);
+
+        while (!queue.isEmpty()) {
+            int vertex = queue.poll();
+            System.out.print(vertex + " ");
+
+            Node curr = adjacencyList[vertex];
+
+            while (curr != null) {
+                if (!visited[curr.data]) {
+                    visited[curr.data] = true;
+                    queue.add(curr.data);
+                }
+
+                curr = curr.next;
+            }
+        }
+
+        System.out.println();
+    }
+
+    // Dijkstra using Adjacency Matrix
+    public void dijkstraMatrix(int start) {
+        if (start < 0 || start >= numVertices) {
+            System.out.println("Invalid start vertex.");
+            return;
+        }
+
+        int[] distance = new int[numVertices];
+        boolean[] visited = new boolean[numVertices];
+
+        Arrays.fill(distance, Integer.MAX_VALUE);
+        distance[start] = 0;
+
+        for (int count = 0; count < numVertices; count++) {
+            int min = Integer.MAX_VALUE;
+            int u = -1;
+
+            for (int i = 0; i < numVertices; i++) {
+                if (!visited[i] && distance[i] < min) {
+                    min = distance[i];
+                    u = i;
+                }
+            }
+
+            if (u == -1) {
+                break;
+            }
+
+            visited[u] = true;
+
+            for (int v = 0; v < numVertices; v++) {
+                if (!visited[v] &&
+                    adjacencyMatrix[u][v] > 0 &&
+                    distance[u] != Integer.MAX_VALUE &&
+                    distance[u] + adjacencyMatrix[u][v] < distance[v]) {
+
+                    distance[v] =
+                        distance[u] + adjacencyMatrix[u][v];
+                }
+            }
+        }
+
+        System.out.println("Dijkstra using Adjacency Matrix:");
+
+        for (int i = 0; i < numVertices; i++) {
+            System.out.println(
+                "Distance from " + start + " to " + i + " = " +
+                (distance[i] == Integer.MAX_VALUE
+                    ? "INF" : distance[i])
+            );
+        }
+    }
+
+    // Dijkstra using Adjacency List
+    public void dijkstraList(int start) {
+        if (start < 0 || start >= numVertices) {
+            System.out.println("Invalid start vertex.");
+            return;
+        }
+
+        int[] distance = new int[numVertices];
+        Arrays.fill(distance, Integer.MAX_VALUE);
+        distance[start] = 0;
+
+        PriorityQueue<int[]> pq =
+            new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
+
+        pq.add(new int[]{start, 0});
+
+        while (!pq.isEmpty()) {
+            int[] current = pq.poll();
+
+            int vertex = current[0];
+            int currentDistance = current[1];
+
+            if (currentDistance != distance[vertex]) {
+                continue;
+            }
+
+            Node curr = adjacencyList[vertex];
+
+            while (curr != null) {
+                int neighbour = curr.data;
+                int weight = curr.weight;
+
+                if (distance[vertex] != Integer.MAX_VALUE &&
+                    distance[vertex] + weight < distance[neighbour]) {
+
+                    distance[neighbour] = distance[vertex] + weight;
+
+                    pq.add(new int[]{
+                        neighbour, distance[neighbour]
+                    });
+                }
+
+                curr = curr.next;
+            }
+        }
+
+        System.out.println("Dijkstra using Adjacency List:");
+
+        for (int i = 0; i < numVertices; i++) {
+            System.out.println(
+                "Distance from " + start + " to " + i + " = " +
+                (distance[i] == Integer.MAX_VALUE
+                    ? "INF" : distance[i])
+            );
+        }
+    }
+}
+
+public class GraphADTMain {
+
+    public static void main(String[] args) {
+
+        GraphADT graph = new GraphADT(5);
+
+        for (int i = 0; i < 5; i++) {
+            graph.insertVertex();
+        }
+
+        graph.insertEdge(0, 1, 4);
+        graph.insertEdge(0, 2, 1);
+        graph.insertEdge(2, 1, 2);
+        graph.insertEdge(1, 3, 1);
+        graph.insertEdge(2, 3, 5);
+        graph.insertEdge(3, 4, 3);
+
+        graph.displayMatrix();
+        graph.displayList();
+
+        System.out.print("DFS Matrix: ");
+        graph.DFSMatrix(0);
+
+        System.out.print("DFS List: ");
+        graph.DFSList(0);
+
+        System.out.print("BFS Matrix: ");
+        graph.BFSMatrix(0);
+
+        System.out.print("BFS List: ");
+        graph.BFSList(0);
+
+        graph.dijkstraMatrix(0);
+        graph.dijkstraList(0);
+    }
+}
+=========================================================================================
+import java.util.Scanner;
+
+public class QuickSort {
+    int[] A;
+    int n, temp, i, j, pivot;
+    Scanner scanner;
+
+    public void getArray(int n) {
+        scanner = new Scanner(System.in);
+        A = new int[n];
+
+        for (i = 0; i < A.length; i++) {
+            System.out.print("A[" + i + "] = ");
+            A[i] = scanner.nextInt();
+        }
+    }
+
+    public void printArray() {
+        for (i = 0; i < A.length; i++) {
+            System.out.print(A[i] + "\t");
+        }
+    }
+
+    public void quickSort(int s, int e) {
+        if (s < e) {
+            i = s;
+            j = e;
+            pivot = A[s];
+            while (i < j) {
+                while (A[i] <= pivot && i < e) i++;
+                while (A[j] >= pivot && j > s) j--;
+                if (j > i) swap(i, j);
+            }
+            swap(s, j);
+            quickSort(s, j - 1);
+            quickSort(j + 1, e);
+        }
+    }
+
+    public void swap(int i, int j) {
+        temp = A[i];
+        A[i] = A[j];
+        A[j] = temp;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("\nEnter the size of array: ");
+        int n = scanner.nextInt();
+
+        QuickSort quickSort = new QuickSort();
+        quickSort.getArray(n);
+
+        System.out.print("\nUnsorted array: \n");
+        quickSort.printArray();
+
+        System.out.println();
+        quickSort.quickSort(0, n - 1);
+
+        System.out.print("\nSorted array: \n");
+        quickSort.printArray();
+    }
+}
+===================================================================================================
+class MergeSort {
+    public int[] mergeSort(int[] a, int n) {
+        if (n < 2) {
+            return a;
+        }
+        int mid = n / 2;
+        int[] l = new int[mid];
+        int[] r = new int[n - mid];
+
+        for (int i = 0; i < mid; i++) {
+            l[i] = a[i];
+        }
+        for (int i = mid; i < n; i++) {
+            r[i - mid] = a[i];
+        }
+        mergeSort(l, mid);
+        mergeSort(r, n - mid);
+
+        merge(a, l, r, mid, n - mid);
+        return a;
+    }
+
+    public void merge(int[] a, int[] l, int[] r, int left, int right) {
+        int i = 0, j = 0, k = 0;
+        while (i < left && j < right) {
+            if (l[i] <= r[j]) {
+                a[k++] = l[i++];
+            } else {
+                a[k++] = r[j++];
+            }
+        }
+        while (i < left) {
+            a[k++] = l[i++];
+        }
+        while (j < right) {
+            a[k++] = r[j++];
+        }
+    }
+
+    public void printArray(int[] A) {
+        for (int i = 0; i < A.length; i++) {
+            System.out.print(A[i] + "\t");
+        }
+    }
+
+    public static void main(String args[]) {
+        int[] val = {5, 1, 6, 2, 3, 4};
+        MergeSort ms = new MergeSort();
+
+        System.out.println("Unsorted: ");
+        ms.printArray(val);
+
+        System.out.println("\nSorted: ");
+        ms.printArray(ms.mergeSort(val, val.length));
+    }
+}
+=======================================================================================
