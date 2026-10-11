@@ -1,0 +1,61 @@
+
+use PMSD
+db.createCollection("product")
+
+db.product.insertMany([
+    {
+        order_id: "o1",
+        year: 2023,
+        cost: { price: 750, currency: "USD" },
+        items: [
+            { product_id: "p1", colours: ["blue", "red"], quantity: 3 },
+            { product_id: "p2", colours: ["black"], quantity: 2 }
+        ],
+        delivery_days: 4
+    }
+])
+
+db.product.find()
+
+db.product.find({ order_id: "o1" })
+
+
+db.product.find({ delivery_days: { $lt: 5 } })
+
+db.product.find({ "cost.price": { $gt: 600 } })
+
+
+db.product.find({ "items.colours": "blue" })
+
+db.product.aggregate([
+    {
+        $group: {
+            _id: "$year",
+            totalOrders: { $sum: 1 }
+        }
+    }
+])
+
+
+db.product.updateOne(
+    { order_id: "o2" },
+    { $set: { delivery_days: 3 } }
+)
+
+db.product.updateOne(
+    { order_id: "o4" },
+    {
+        $push: {
+            items: {
+                product_id: "p6",
+                colours: ["orange"],
+                quantity: 1
+            }
+        }
+    }
+)
+
+db.Student.deleteOne({ StudentID: 1 })
+db.Student.deleteMany({ Course: "IT" })
+
+LOAD DATA LOCAL INFILE "products.txt" INTO TABLE products;
